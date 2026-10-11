@@ -393,6 +393,9 @@
         <p class="footer-note">Hecho con mucho amor ♡</p>
     </main>
 
+    <!-- AUDIO: la música comienza cuando se abre la carta y se detiene al cerrarla. -->
+    <audio id="backgroundAudio" src="audio.mp3" preload="auto" loop></audio>
+
     <!-- JAVASCRIPT: controla los toques, los efectos y la apertura de la carta -->
     <script>
         // ELEMENTOS: referencias a las partes interactivas de la página.
@@ -402,6 +405,7 @@
         const letter = document.querySelector(".letter");
         const tapLabel = document.querySelector("#tapLabel");
         const subtitle = document.querySelector("#subtitle");
+        const backgroundAudio = document.querySelector("#backgroundAudio");
         const tapsNeeded = 5;
         let tapCount = 0;
 
@@ -462,6 +466,10 @@
             tapLabel.textContent = "¡La cartita es tuya! 💌";
             openButton.setAttribute("aria-label", "Abriendo tu carta");
             subtitle.hidden = true;
+            backgroundAudio.currentTime = 0;
+            backgroundAudio.play().catch((error) => {
+                console.warn("No se pudo reproducir audio.mp3:", error);
+            });
             window.setTimeout(() => {
                 scene.classList.add("is-open");
                 letter.setAttribute("aria-hidden", "false");
@@ -476,6 +484,8 @@
 
             scene.classList.add("is-closing");
             letter.setAttribute("aria-hidden", "true");
+            backgroundAudio.pause();
+            backgroundAudio.currentTime = 0;
             tapCount = 0;
             subtitle.hidden = false;
             resetButton.hidden = true;
